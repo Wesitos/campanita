@@ -48,19 +48,19 @@ def do_request(via, nombre, cuadra):
     print(url)
     while True:
             try:
-                r = req.get(url)
+                r = req.get(url,headers={'User-Agent': 'Pedro Palacios - pedro_gpa@hotmail.com'})
             except req.exceptions.Timeout:
-                imprime("Timeout error")
+                print("Timeout error")
                 continue
             except req.exceptions.ConnectionError as error:
                 errno = error.errno
                 err_msg = "ConnectionError"
                 if errno == 101:
                     err_msg += (": Esta conectado a internet?")
-                imprime(err_msg)
+                print(err_msg)
                 continue
             except Exception as e:
-                imprime("Excepcion: " + str(e))
+                print("Excepcion: " + str(e))
                 continue
             else:
                 try:
@@ -93,11 +93,13 @@ def do_request(via, nombre, cuadra):
 if __name__ == "__main__":
     set_dir = gather_address()
     address_dir = {}
+    f = open("salida.txt", "w")
     for item in set_dir:
         res = do_request(*item)
         if not res:
             continue
         print(res)
+        f.write(item + "////" + json.dumps(res))
+        f.flush()
         address_dir[item] = res
-    with open("salida.json"):
-        open.write(json.dumps(address_dir,indent=2))
+        time.sleep(0.6)
