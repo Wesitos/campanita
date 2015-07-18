@@ -63,8 +63,12 @@ def do_request(via, nombre, cuadra):
                 imprime("Excepcion: " + str(e))
                 continue
             else:
-                data = json.loads(r.text)
-                break
+                try:
+                    data = r.json()
+                except:
+                    print("No se puede parsear json:\n {texto}".format(texto=r.text))
+                else:
+                    break
                 # Filtramos los que sean de cercado de Lima
     results = [d for d in data if d["address"].get("city", "").lower() == "lima"]
     if not len(results):
