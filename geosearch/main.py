@@ -5,6 +5,7 @@ import json
 import csv
 import logging
 import unicodedata
+import time
 
 logger = logging.getLogger("Direccion")
 logger.handlers = []
@@ -45,9 +46,26 @@ def get_url_data(via, nombre, cuadra) :
 def do_request(via, nombre, cuadra):
     url = url_base + get_url_data(via,nombre,cuadra) + "?" + params
     print(url)
-    res = req.get(url)
-    data = json.loads(res.text)
-    # Filtramos los que sean de cercado de Lima
+    while True:
+            try:
+                r = req.get(url)
+            except req.exceptions.Timeout:
+                imprime("Timeout error")
+                continue
+            except req.exceptions.ConnectionError as error:
+                errno = error.errno
+                err_msg = "ConnectionError"
+                if errno == 101:
+                    err_msg += (": Esta conectado a internet?")
+                imprime(err_msg)
+                continue
+            except Exception as e:
+                imprime("Excepcion: " + str(e))
+                continue
+            else:
+                data = json.loads(r.text)
+                break
+                # Filtramos los que sean de cercado de Lima
     results = [d for d in data if d["address"].get("city", "").lower() == "lima"]
     if not len(results):
         logger.error(u"Error en direccion: {via},{nombre},{cuadra}"
@@ -67,6 +85,7 @@ def do_request(via, nombre, cuadra):
                 .format(via=via,nombre=nombre,cuadra=cuadra))
     return res_dict
 
+
 if __name__ == "__main__":
     set_dir = gather_address()
     address_dir = {}
@@ -76,3 +95,5 @@ if __name__ == "__main__":
             continue
         print(res)
         address_dir[item] = res
+    with open("salida.json"):
+        open.write(json.dumps(address_dir,indent=2))
