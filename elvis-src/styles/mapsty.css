@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+}
+
+.map {
+    position: relative;
+    overflow: hidden;
+}
+
+.layer {
+    position: absolute;
+}
+
+.tile {
+    pointer-events: none;
+    position: absolute;
+    widht: 256px;
+    height: 256px;
+}
+
+.info {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
