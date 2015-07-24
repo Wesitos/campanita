@@ -74,7 +74,7 @@ def do_request(via, nombre, cuadra):
     if not len(results):
         logger.error(u"Error en direccion: {via},{nombre},{cuadra}"
                      .format(via=via,nombre=nombre,cuadra=cuadra))
-        return None
+        return {}
     
     first = results[0]
     res_dict = {
@@ -96,9 +96,7 @@ if __name__ == "__main__":
     f = open("salida.txt", "w")
     for item in set_dir:
         res = do_request(*item)
-        if not res:
-            continue
-        print(res)
+        print("Numero de Nodos: " + len(res.get("geojson", [])))
         f.write(",".join(item) + "////" + json.dumps(res) + "\n")
         f.flush()
         address_dir[item] = res
