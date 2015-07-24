@@ -48,7 +48,7 @@ def do_request(via, nombre, cuadra):
     print(url)
     while True:
             try:
-                r = req.get(url,headers={'User-Agent': 'Pedro Palacios - pedro_gpa@hotmail.com'})
+                r = req.get(url)
             except req.exceptions.Timeout:
                 print("Timeout error")
                 continue
@@ -99,7 +99,7 @@ if __name__ == "__main__":
         if not res:
             continue
         print(res)
-        f.write(item + "////" + json.dumps(res))
+        f.write(",".join(item) + "////" + json.dumps(res) + "\n")
         f.flush()
         address_dir[item] = res
-        time.sleep(0.6)
+        time.sleep(1.2)
