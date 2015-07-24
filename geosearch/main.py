@@ -96,7 +96,7 @@ if __name__ == "__main__":
     f = open("salida.txt", "w")
     for item in set_dir:
         res = do_request(*item)
-        print("Numero de Nodos: " + len(res.get("geojson", [])))
+        print("Numero de Nodos: {cant}".format(cant=len(res.get("geojson", []))))
         f.write(",".join(item) + "////" + json.dumps(res) + "\n")
         f.flush()
         address_dir[item] = res
